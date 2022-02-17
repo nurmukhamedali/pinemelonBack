@@ -1,7 +1,7 @@
 Vue.component("header-pm", {
     template:
         '<header class="p-3 mb-3 border-bottom">\n' +
-        '        <div class="container">\n' +
+        '        <div class="c ontainer">\n' +
         '            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">\n' +
         '                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">\n' +
         '                    <h3>PineMelon</h3>\n' +

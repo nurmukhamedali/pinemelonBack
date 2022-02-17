@@ -27,28 +27,9 @@ Vue.component('product-form', {
         }
     },
 
-    template:
-        '<div v-if="showModal"><transition name="modal"><div class="modal-mask"><div class="modal-wrapper"><div class="modal-dialog" role="document"><div class="modal-content">\n' +
-            '<div class="modal-header">' +
-                '<h5 v-if="this.id" class="modal-title">Edit Product</h5>' +
-                    '<h5 v-else class="modal-title">New Product</h5>' +
-                '<v-btn type="button" class="close btn-close" @click="close"/>' +
-            '</div>' +
-            '<div class="modal-body">' +
-                '<input type="text" placeholder="Enter product name" v-model="name"/> ' +
-                '<input type="text" placeholder="Enter product brand" v-model="brand"/> ' +
-                '<input type="text" placeholder="Enter product description" v-model="description"/> ' +
-                '<input type="text" placeholder="Enter product price" v-model="price"/> ' +
-                '<input type="text" placeholder="Enter product amount" v-model="amount"/> ' +
-                '<input type="checkbox" v-model="enabled"/> ' +
-            '</div>' +
-            '<div class="modal-footer">' +
-                '<button type="button" class="btn btn-primary" @click="save">Save</button>' +
-                '<button type="button" class="btn btn-secondary" @click="close">Close</button>' +
-            '</div>' +
-        '</div></div></div></div></transition></div>',
+    template: modal_form,
     methods: {
-        save: function (){
+        save_product: function (){
             let product = {
                 name: this.name,
                 brand: this.brand,
@@ -82,22 +63,12 @@ Vue.component('product-form', {
     }
 })
 
-Vue.component('product-image', {
-    template:
-        '<svg class="bd-placeholder-img card-img-top" width="100%" height="225" ' +
-            'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">' +
-            '<title>Placeholder</title>' +
-            '<rect width="100%" height="100%" fill="#55595c"></rect>' +
-            '<text x="50%" y="50%" fill="#eceeef">Thumbnail</text>' +
-        '</svg>'
-})
-
 Vue.component('product-row', {
     props: ['product', 'editMethod', 'products'],
     template:
         '<div class="col">' +
             '<div class="card shadow-sm">' +
-                '<product-image />' +
+                product_image +
                 '<div class="card-body">' +
                     '<h5 class="card-title">' +
                         '<div class="d-flex justify-content-between align-items-center">' +
