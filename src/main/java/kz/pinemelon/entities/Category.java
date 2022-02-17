@@ -9,16 +9,13 @@ import java.util.List;
 
 @Entity
 @Table
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-    private String image;
+    private String icon;
     private boolean enabled;
 
     @OneToMany(mappedBy = "category")
@@ -48,12 +45,12 @@ public class Category {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setIcon(String image) {
+        this.icon = image;
     }
 
     public boolean isEnabled() {

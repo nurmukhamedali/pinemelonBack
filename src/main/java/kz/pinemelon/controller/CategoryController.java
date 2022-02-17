@@ -26,6 +26,7 @@ public class CategoryController {
         return category;
     }
 
+    @CrossOrigin(origins="http://localhost:8080")
     @PostMapping
     public Category create(Category category){
         return categoryRepository.save(category);
