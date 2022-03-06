@@ -1,10 +1,7 @@
 package kz.pinemelon.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
+import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -17,9 +14,6 @@ public class Category {
     private String description;
     private String icon;
     private boolean enabled;
-
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
 
     public Long getId() {
         return id;
@@ -49,8 +43,8 @@ public class Category {
         return icon;
     }
 
-    public void setIcon(String image) {
-        this.icon = image;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public boolean isEnabled() {
@@ -61,11 +55,4 @@ public class Category {
         this.enabled = enabled;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }
