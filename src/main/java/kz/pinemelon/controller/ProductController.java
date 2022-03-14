@@ -29,7 +29,7 @@ public class ProductController {
         return product;
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
+    @CrossOrigin(origins="*")
     @PostMapping
     public Product create(@RequestBody Product product){
         return productRepository.save(product);
