@@ -1,70 +1,49 @@
 package kz.pinemelon.controller;
 
 import kz.pinemelon.entities.Category;
-import kz.pinemelon.repositories.CategoryRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
+import kz.pinemelon.services.CategoryService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("category")
+@CrossOrigin(origins="http://localhost:8080")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
     @GetMapping
     public List<Category> getAll() {
-        return categoryRepository.findAll();
+        return categoryService.listCategories();
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
     @GetMapping("{id}")
     public Category get(@PathVariable("id") Category category){
         return category;
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
     @PostMapping
     public Category create(
             @RequestBody Category category
     ) {
-        return categoryRepository.save(category);
+        return categoryService.create(category);
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
     @PutMapping("{id}")
     public Category update(
             @PathVariable("id") Category categoryFromDB,
             @RequestBody Category category
     ){
-        BeanUtils.copyProperties(category, categoryFromDB, "id");
-        return categoryRepository.save(categoryFromDB);
+        return categoryService.update(categoryFromDB, category);
     }
 
-    @CrossOrigin(origins="http://localhost:8080")
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Category category){
-        categoryRepository.delete(category);
+        categoryService.delete(category);
     }
 }
