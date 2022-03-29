@@ -1,7 +1,11 @@
 package kz.pinemelon.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -9,11 +13,45 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.shortData.class)
     private Long id;
+    @JsonView(Views.shortData.class)
     private String name;
+    @JsonView(Views.fullData.class)
     private String description;
+    @JsonView(Views.shortData.class)
     private String icon;
+    @JsonView(Views.shortData.class)
     private boolean enabled;
+
+    @OneToMany(mappedBy = "category")
+    @JsonView(Views.superFullData.class)
+    private List<Product> products;
+
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(Views.fullData.class)
+    private LocalDateTime creationDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(Views.fullData.class)
+    private LocalDateTime updateDate;
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
+    }
 
     public Long getId() {
         return id;
@@ -55,4 +93,11 @@ public class Category {
         this.enabled = enabled;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }

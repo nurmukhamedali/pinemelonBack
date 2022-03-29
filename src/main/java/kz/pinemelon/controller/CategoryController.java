@@ -1,9 +1,13 @@
 package kz.pinemelon.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Category;
+import kz.pinemelon.entities.Product;
+import kz.pinemelon.entities.Views;
 import kz.pinemelon.services.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,12 +22,15 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getAll() {
+    @JsonView(Views.shortData.class)
+    List<Category> getAll() {
         return categoryService.listCategories();
     }
 
     @GetMapping("{id}")
-    public Category get(@PathVariable("id") Category category){
+    @JsonView(Views.superFullData.class)
+    public Category get(
+            @PathVariable("id") Category category){
         return category;
     }
 
@@ -43,7 +50,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Category category){
+    public void delete(
+            @PathVariable("id") Category category){
         categoryService.delete(category);
     }
 }

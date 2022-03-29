@@ -6,7 +6,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -14,6 +16,8 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public Category create(Category category){
+        category.setCreationDate(LocalDateTime.now());
+        category.setUpdateDate(LocalDateTime.now());
         return categoryRepository.save(category);
     }
 
@@ -21,10 +25,11 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category update(Category old, Category temp){
+    public Category update(Category category, Category temp){
         // refresh values of old by values of temp
-        BeanUtils.copyProperties(temp, old, "id");
-        return categoryRepository.save(old);
+        BeanUtils.copyProperties(temp, category, "id");
+        category.setUpdateDate(LocalDateTime.now());
+        return categoryRepository.save(category);
     }
 
     public void delete(Category category){
