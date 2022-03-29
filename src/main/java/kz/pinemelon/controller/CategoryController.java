@@ -28,7 +28,7 @@ public class CategoryController {
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.superFullData.class)
+    @JsonView(Views.fullData.class)
     public Category get(
             @PathVariable("id") Category category){
         return category;

@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Locale;
+import java.util.Set;
 
 @Service
 public class ProductService {
@@ -26,15 +28,15 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    private List<Product> listAll(){
-        return productRepository.findAll();
+    private Set<Product> listAll(){
+        return new HashSet<>(productRepository.findAll());
     }
 
-    private List<Product> listByCategory(Category category){
+    private Set<Product> listByCategory(Category category){
         return category.getProducts();
     }
 
-    public List<Product> list(Long category_id){
+    public Set<Product> list(Long category_id){
         if (categoryRepository.existsById(category_id)){
             Category category = categoryRepository.getById(category_id);
             return listByCategory(category);

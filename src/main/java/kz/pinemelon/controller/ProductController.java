@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("category/{cat_id}/product")
@@ -22,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     @JsonView(Views.shortData.class)
-    public List<Product> getAll(@PathVariable("cat_id") Long category_id) {
+    public Set<Product> getAll(@PathVariable("cat_id") Long category_id) {
         return productService.list(category_id);
     }
 

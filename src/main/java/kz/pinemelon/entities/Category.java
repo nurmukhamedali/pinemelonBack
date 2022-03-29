@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -26,7 +25,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     @JsonView(Views.superFullData.class)
-    private List<Product> products;
+    private Set<Product> products;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -93,11 +92,11 @@ public class Category {
         this.enabled = enabled;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 }
