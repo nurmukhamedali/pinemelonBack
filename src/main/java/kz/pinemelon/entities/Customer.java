@@ -1,7 +1,6 @@
 package kz.pinemelon.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
@@ -13,34 +12,25 @@ import java.time.LocalDateTime;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.shortData.class)
     private Long id;
 
     @Column (nullable = false, unique = true, length = 45, name = "username")
-    @JsonView(Views.shortData.class)
     private String username;
     @Column (nullable = false, length = 64, name = "password")
-    @JsonView(Views.shortData.class)
     private String password;
-    @JsonView(Views.shortData.class)
     private String firstname;
-    @JsonView(Views.shortData.class)
     private String lastname;
-    @JsonView(Views.shortData.class)
     private boolean active;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
-    @JsonView(Views.fullData.class)
     private Cart cart;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.fullData.class)
     private LocalDateTime creationDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.fullData.class)
     private LocalDateTime updateDate;
 
     public Long getId() {

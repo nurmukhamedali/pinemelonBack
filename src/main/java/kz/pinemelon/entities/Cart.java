@@ -3,7 +3,7 @@ package kz.pinemelon.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.catalina.User;
 
 import javax.persistence.*;
@@ -16,19 +16,16 @@ import java.util.Set;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.shortData.class)
     private Long id;
 
     @OneToOne(mappedBy = "cart")
-    @JsonView(Views.superFullData.class)
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "cart")
-    @JsonView(Views.fullData.class)
     private Set<CartItem> items;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.fullData.class)
     private LocalDateTime updateDate;
 
 
@@ -50,4 +47,19 @@ public class Cart {
         this.updateDate = updateDate;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Set<CartItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<CartItem> items) {
+        this.items = items;
+    }
 }

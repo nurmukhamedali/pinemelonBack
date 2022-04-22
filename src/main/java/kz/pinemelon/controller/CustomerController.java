@@ -1,6 +1,5 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Customer;
 import kz.pinemelon.entities.Views;
 import kz.pinemelon.services.CustomerService;
@@ -17,13 +16,11 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
-    @JsonView(Views.shortData.class)
     List<Customer> getAll() {
         return customerService.listCustomer();
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.fullData.class)
     public Customer get(
             @PathVariable("id") Customer customer){
         return customer;

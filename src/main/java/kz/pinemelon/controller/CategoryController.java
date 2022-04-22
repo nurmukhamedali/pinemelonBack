@@ -1,6 +1,5 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Category;
 import kz.pinemelon.entities.Product;
 import kz.pinemelon.entities.Views;
@@ -22,13 +21,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    @JsonView(Views.shortData.class)
     List<Category> getAll() {
         return categoryService.listCategories();
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.fullData.class)
     public Category get(
             @PathVariable("id") Category category){
         return category;

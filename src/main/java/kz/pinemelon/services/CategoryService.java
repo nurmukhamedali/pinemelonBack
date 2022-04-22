@@ -1,5 +1,6 @@
 package kz.pinemelon.services;
 
+import kz.pinemelon.entities.CartItem;
 import kz.pinemelon.entities.Category;
 import kz.pinemelon.repositories.CategoryRepository;
 import org.springframework.beans.BeanUtils;
@@ -34,4 +35,5 @@ public class CategoryService {
     public void delete(Category category){
         categoryRepository.delete(category);
     }
+
 }

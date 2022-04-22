@@ -1,39 +1,32 @@
 package kz.pinemelon.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.shortData.class)
     private Long id;
-    @JsonView(Views.shortData.class)
     private String name;
-    @JsonView(Views.fullData.class)
     private String description;
-    @JsonView(Views.shortData.class)
     private String icon;
-    @JsonView(Views.shortData.class)
     private boolean enabled;
 
     @OneToMany(mappedBy = "category")
-    @JsonView(Views.superFullData.class)
-    private Set<Product> products;
+    @JsonIgnore
+    private List<Product> products;
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.fullData.class)
     private LocalDateTime creationDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.fullData.class)
     private LocalDateTime updateDate;
 
     public LocalDateTime getCreationDate() {
@@ -92,11 +85,11 @@ public class Category {
         this.enabled = enabled;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

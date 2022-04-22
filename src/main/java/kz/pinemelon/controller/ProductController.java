@@ -1,6 +1,5 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Category;
 import kz.pinemelon.entities.Product;
 import kz.pinemelon.entities.Views;
@@ -15,20 +14,23 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("category/{cat_id}/product")
+@RequestMapping("")
 @CrossOrigin(origins="http://localhost:8080")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
-    @JsonView(Views.shortData.class)
-    public Set<Product> getAll(@PathVariable("cat_id") Long category_id) {
-        return productService.list(category_id);
+    @GetMapping("category/{categoryId}/products")
+    public List<Product> getAll(@PathVariable("categoryId") Category category) {
+        return productService.listByCategory(category);
     }
 
-    @GetMapping("{id}")
-    @JsonView(Views.fullData.class)
+    @GetMapping("product")
+    public List<Product> getAll() {
+        return productService.listAll();
+    }
+
+    @GetMapping("product/{id}")
     public Product get(@PathVariable("id") Product product){
         return product;
     }
@@ -38,7 +40,7 @@ public class ProductController {
         return productService.create(product);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("product/{id}")
     public Product update(
             @PathVariable("id") Product productFromDB,
             @RequestBody Product product
@@ -46,7 +48,7 @@ public class ProductController {
         return productService.update(productFromDB, product);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("product/{id}")
     public void delete(@PathVariable("id") Product product){
         productService.delete(product);
     }

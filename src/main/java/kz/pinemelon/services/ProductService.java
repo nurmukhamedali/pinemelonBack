@@ -6,13 +6,13 @@ import kz.pinemelon.repositories.CategoryRepository;
 import kz.pinemelon.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Locale;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -28,22 +28,13 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    private Set<Product> listAll(){
-        return new HashSet<>(productRepository.findAll());
+    public List<Product> listAll(){
+        return productRepository.findAll(Sort.by(Sort.Order.asc("id")));
     }
 
-    private Set<Product> listByCategory(Category category){
+    public List<Product> listByCategory(Category category){
+        Collections.sort(category.getProducts());
         return category.getProducts();
-    }
-
-    public Set<Product> list(Long category_id){
-        if (categoryRepository.existsById(category_id)){
-            Category category = categoryRepository.getById(category_id);
-            return listByCategory(category);
-        } else {
-            return listAll();
-        }
-
     }
 
     public Product update(Product product, Product temp){

@@ -1,9 +1,10 @@
 package kz.pinemelon.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,20 +16,17 @@ import java.util.Set;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.shortData.class)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="product_id")
-    @JsonView(Views.fullData.class)
+    @JoinColumn(name="product_id", unique = true)
     private Product product;
 
-    @JsonView(Views.fullData.class)
     private int amount;
 
     @ManyToOne
     @JoinColumn(name="cart_id")
-    @JsonView(Views.superFullData.class)
+    @JsonIgnore
     private Cart cart;
 
 

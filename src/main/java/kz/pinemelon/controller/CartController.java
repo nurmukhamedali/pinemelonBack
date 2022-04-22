@@ -1,10 +1,6 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import kz.pinemelon.entities.Cart;
-import kz.pinemelon.entities.Category;
-import kz.pinemelon.entities.Product;
-import kz.pinemelon.entities.Views;
+import kz.pinemelon.entities.*;
 import kz.pinemelon.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +15,11 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping
-    @JsonView(Views.shortData.class)
     List<Cart> getAll() {
         return cartService.listCart();
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.fullData.class)
     public Cart get(
             @PathVariable("id") Cart cart){
         return cart;
@@ -51,6 +45,5 @@ public class CartController {
             @PathVariable("id") Cart cart){
         cartService.delete(cart);
     }
-
 
 }

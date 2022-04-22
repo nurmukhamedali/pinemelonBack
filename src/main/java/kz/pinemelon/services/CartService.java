@@ -1,6 +1,7 @@
 package kz.pinemelon.services;
 
 import kz.pinemelon.entities.Cart;
+import kz.pinemelon.entities.CartItem;
 import kz.pinemelon.repositories.CartRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +33,6 @@ public class CartService {
     public void delete(Cart cart){
         cartRepository.delete(cart);
     }
+
+
 }
