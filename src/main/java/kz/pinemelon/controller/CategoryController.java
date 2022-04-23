@@ -2,11 +2,9 @@ package kz.pinemelon.controller;
 
 import kz.pinemelon.entities.Category;
 import kz.pinemelon.entities.Product;
-import kz.pinemelon.entities.Views;
 import kz.pinemelon.services.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,9 +18,14 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("{id}/categories")
+    public List<Category> getAll(@PathVariable("id") Category category) {
+        return categoryService.listByCategory(category);
+    }
+
     @GetMapping
     List<Category> getAll() {
-        return categoryService.listCategories();
+        return categoryService.list();
     }
 
     @GetMapping("{id}")
