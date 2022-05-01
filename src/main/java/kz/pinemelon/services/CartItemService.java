@@ -2,6 +2,8 @@ package kz.pinemelon.services;
 
 import kz.pinemelon.entities.Cart;
 import kz.pinemelon.entities.CartItem;
+import kz.pinemelon.entities.Category;
+import kz.pinemelon.entities.Product;
 import kz.pinemelon.repositories.CartItemRepository;
 import kz.pinemelon.repositories.CartRepository;
 import org.springframework.beans.BeanUtils;
@@ -16,8 +18,18 @@ public class CartItemService {
     @Autowired
     CartItemRepository cartItemRepository;
 
+    @Autowired
+    CartRepository cartRepository;
+
     public CartItem create(CartItem cartItem){
         return cartItemRepository.save(cartItem);
+    }
+
+    public List<CartItem> listByCart(Cart cart){
+        if (cartRepository.existsById(cart.getId())){
+            return cart.getItems();
+        }
+        return null;
     }
 
     public List<CartItem> listCartItems(){

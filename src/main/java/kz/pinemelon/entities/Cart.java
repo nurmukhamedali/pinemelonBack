@@ -2,30 +2,33 @@ package kz.pinemelon.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.catalina.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.CartView.Public.class, View.CustomerView.Internal.class})
     private Long id;
 
     @OneToOne(mappedBy = "cart")
-    @JsonIgnore
+    @JsonBackReference
     private Customer customer;
 
     @OneToMany(mappedBy = "cart")
-    private Set<CartItem> items;
+    @JsonView(View.CustomerView.Internal.class)
+    private List<CartItem> items;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(View.CartView.Internal.class)
     private LocalDateTime updateDate;
 
 
@@ -55,11 +58,11 @@ public class Cart {
         this.customer = customer;
     }
 
-    public Set<CartItem> getItems() {
+    public List<CartItem> getItems() {
         return items;
     }
 
-    public void setItems(Set<CartItem> items) {
+    public void setItems(List<CartItem> items) {
         this.items = items;
     }
 }

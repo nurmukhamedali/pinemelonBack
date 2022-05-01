@@ -3,6 +3,7 @@ package kz.pinemelon.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
@@ -14,11 +15,16 @@ import java.time.LocalDateTime;
 public abstract class Component {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
     protected Long id;
 
+    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
     protected String name;
+    @JsonView(View.ComponentView.Internal.class)
     protected String description;
+    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
     protected String image;
+    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
     protected boolean enabled;
 
     @ManyToOne
@@ -28,9 +34,11 @@ public abstract class Component {
 
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(View.ComponentView.Internal.class)
     private LocalDateTime creationDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(View.ComponentView.Internal.class)
     private LocalDateTime updateDate;
 
     public Long getId() {return id;}

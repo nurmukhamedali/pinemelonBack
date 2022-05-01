@@ -1,7 +1,9 @@
 package kz.pinemelon.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
@@ -12,21 +14,23 @@ import java.util.Set;
 
 @Entity
 @Table
-@EqualsAndHashCode(of = {"id"})
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.CartItemView.Public.class, View.CustomerView.Internal.class})
     private Long id;
 
     @ManyToOne
     @JoinColumn(name="product_id", unique = true)
+    @JsonView({View.CartItemView.Internal.class, View.CustomerView.Internal.class})
     private Product product;
 
+    @JsonView({View.CartItemView.Public.class, View.CustomerView.Internal.class})
     private int amount;
 
     @ManyToOne
     @JoinColumn(name="cart_id")
-    @JsonIgnore
+    @JsonBackReference
     private Cart cart;
 
 

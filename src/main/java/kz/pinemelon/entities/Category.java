@@ -1,7 +1,9 @@
 package kz.pinemelon.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
 @Table
 public class Category extends Component {
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
+    @JsonBackReference
     private List<Component> components;
 
     public List<Component> getComponents() {

@@ -1,7 +1,8 @@
 package kz.pinemelon.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Customer;
-import kz.pinemelon.entities.Views;
+import kz.pinemelon.entities.View;
 import kz.pinemelon.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +17,20 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
+    @JsonView(View.CustomerView.Public.class)
     List<Customer> getAll() {
         return customerService.listCustomer();
     }
 
     @GetMapping("{id}")
+    @JsonView(View.CustomerView.Internal.class)
     public Customer get(
             @PathVariable("id") Customer customer){
         return customer;
     }
 
     @PostMapping
+    @JsonView(View.CustomerView.Public.class)
     public Customer create(
             @RequestBody Customer customer
     ) {
@@ -34,6 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping("{id}")
+    @JsonView(View.CustomerView.Public.class)
     public Customer update(
             @PathVariable("id") Customer customerFromDB,
             @RequestBody Customer customer
@@ -42,6 +47,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("{id}")
+    @JsonView(View.CustomerView.Public.class)
     public void delete(
             @PathVariable("id") Customer customer){
         customerService.delete(customer);
