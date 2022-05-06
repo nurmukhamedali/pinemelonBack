@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
-@CrossOrigin(origins="http://localhost:8080")
+@RequestMapping()
+@CrossOrigin(origins="*")
 public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
@@ -35,10 +35,11 @@ public class CartItemController {
     }
 
     @PostMapping("item")
-    @JsonView(View.CartItemView.Public.class)
     public CartItem create(
             @RequestBody CartItem cartItem
     ) {
+        int amount = cartItem.getAmount();
+        System.out.println(amount);
         return cartItemService.create(cartItem);
     }
 

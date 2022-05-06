@@ -2,52 +2,43 @@ package kz.pinemelon.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import kz.pinemelon.entities.Category;
-import kz.pinemelon.entities.Product;
 import kz.pinemelon.entities.View;
+import kz.pinemelon.form.CategoryForm;
 import kz.pinemelon.services.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("category")
+@RequestMapping
 @CrossOrigin(origins="http://localhost:8080")
 public class CategoryController {
+    @Autowired
+    private CategoryService categoryService;
 
-    private final CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
-    @GetMapping("{id}/categories")
+    @GetMapping("/categories")
     @JsonView(View.ComponentView.Public.class)
-    public List<Category> getAll(@PathVariable("id") Category category) {
-        return categoryService.listByCategory(category);
+    public List<Category> getCategories(@RequestParam(required = false, value = "categoryId", defaultValue = "0") Category category) {
+        return categoryService.list(category);
     }
 
-    @GetMapping
-    @JsonView(View.ComponentView.Public.class)
-    List<Category> getAll() {
-        return categoryService.list();
-    }
-
-    @GetMapping("{id}")
+    @GetMapping("/categories/{id}")
     @JsonView(View.ComponentView.Internal.class)
     public Category get(
             @PathVariable("id") Category category){
         return category;
     }
 
-    @PostMapping
+    @PostMapping("/categories")
     @JsonView(View.ComponentView.Public.class)
     public Category create(
-            @RequestBody Category category
+            @RequestBody CategoryForm category
     ) {
         return categoryService.create(category);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/categories/{id}")
     @JsonView(View.ComponentView.Public.class)
     public Category update(
             @PathVariable("id") Category categoryFromDB,
@@ -56,7 +47,7 @@ public class CategoryController {
         return categoryService.update(categoryFromDB, category);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/categories/{id}")
     @JsonView(View.ComponentView.Public.class)
     public void delete(
             @PathVariable("id") Category category){

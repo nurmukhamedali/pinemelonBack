@@ -15,10 +15,20 @@ import java.time.LocalDateTime;
 public abstract class Component {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
+    @JsonView({
+            View.ComponentView.Public.class,
+            View.CartItemView.Internal.class,
+            View.CustomerView.Internal.class,
+            View.CartView.Internal.class
+    })
     protected Long id;
 
-    @JsonView({View.ComponentView.Public.class, View.CartItemView.Internal.class, View.CustomerView.Internal.class})
+    @JsonView({
+            View.ComponentView.Public.class,
+            View.CartItemView.Internal.class,
+            View.CustomerView.Internal.class,
+            View.CartView.Internal.class
+    })
     protected String name;
     @JsonView(View.ComponentView.Internal.class)
     protected String description;

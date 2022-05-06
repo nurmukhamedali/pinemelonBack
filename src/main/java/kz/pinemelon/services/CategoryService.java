@@ -3,6 +3,7 @@ package kz.pinemelon.services;
 import kz.pinemelon.entities.Category;
 import kz.pinemelon.entities.Component;
 import kz.pinemelon.entities.Product;
+import kz.pinemelon.form.CategoryForm;
 import kz.pinemelon.repositories.CategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,21 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public Category create(Category category){
+    public Category create(CategoryForm categoryForm){
+        Category category = new Category();
+        category.setName(categoryForm.getName());
+        category.setDescription(categoryForm.getDescription());
+        category.setImage(categoryForm.getImage());
+        category.setEnabled(categoryForm.isEnabled());
+        if (categoryForm.getCategory_id() != null){
+            if(categoryRepository.existsById(categoryForm.getCategory_id())){
+                Category parentCategory = categoryRepository.getById(categoryForm.getCategory_id());
+                category.setCategory(parentCategory);
+            }
+        }
         category.setCreationDate(LocalDateTime.now());
         category.setUpdateDate(LocalDateTime.now());
         return categoryRepository.save(category);
-    }
-
-    public List<Category> list(){
-        return categoryRepository.findAll();
     }
 
     public Category update(Category category, Category temp){
@@ -48,10 +56,12 @@ public class CategoryService {
         return categories;
     }
 
-    public List<Category> listByCategory(Category category){
-        if (categoryRepository.existsById(category.getId())){
+    public List<Category> list(Category category){
+        if (category == null)
+            return categoryRepository.findAll();
+        else if (categoryRepository.existsById(category.getId())){
             return this.getCategories(category);
         }
-        return null;
+        return categoryRepository.findAll();
     }
 }

@@ -20,11 +20,12 @@ public class Cart {
     private Long id;
 
     @OneToOne(mappedBy = "cart")
-    @JsonBackReference
+    @JsonView(View.CartView.Internal.class)
     private Customer customer;
 
     @OneToMany(mappedBy = "cart")
-    @JsonView(View.CustomerView.Internal.class)
+    @JsonManagedReference
+    @JsonView({View.CartView.Internal.class, View.CustomerView.Internal.class})
     private List<CartItem> items;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

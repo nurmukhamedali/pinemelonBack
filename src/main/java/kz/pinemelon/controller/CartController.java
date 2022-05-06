@@ -15,27 +15,26 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("customer/{customerId}/cart")
+    @GetMapping("cart")
     @JsonView(View.CustomerView.Internal.class)
-    public Cart getCart(
-            @PathVariable("customerId") Customer customer){
+    public Cart getCustomerCart(@RequestParam("customerId") Customer customer){
         return customer.getCart();
     }
 
-    @GetMapping("cart")
+    @GetMapping("/carts")
     @JsonView(View.CartView.Public.class)
     List<Cart> getAll() {
         return cartService.listCart();
     }
 
-    @GetMapping("cart/{id}")
+    @GetMapping("/carts/{id}")
     @JsonView(View.CartView.Internal.class)
     public Cart get(
             @PathVariable("id") Cart cart){
         return cart;
     }
 
-    @PostMapping("cart")
+    @PostMapping("/carts")
     @JsonView(View.CartView.Internal.class)
     public Cart create(
             @RequestBody Cart cart
@@ -43,7 +42,7 @@ public class CartController {
         return cartService.create(cart);
     }
 
-    @PutMapping("cart/{id}")
+    @PutMapping("/carts/{id}")
     @JsonView(View.CartView.Internal.class)
     public Cart update(
             @PathVariable("id") Cart cartFromDB,
@@ -52,7 +51,7 @@ public class CartController {
         return cartService.update(cartFromDB, cart);
     }
 
-    @DeleteMapping("cart/{id}")
+    @DeleteMapping("/carts/{id}")
     @JsonView(View.CartView.Internal.class)
     public void delete(
             @PathVariable("id") Cart cart){

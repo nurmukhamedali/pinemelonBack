@@ -33,6 +33,4 @@ public class CartService {
     public void delete(Cart cart){
         cartRepository.delete(cart);
     }
-
-
 }

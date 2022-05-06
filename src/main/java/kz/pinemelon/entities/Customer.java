@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(View.CustomerView.Public.class)
+    @JsonView({View.CustomerView.Public.class, View.CartView.Internal.class})
     private Long id;
 
     @Column (nullable = false, unique = true, length = 45, name = "username")
-    @JsonView(View.CustomerView.Public.class)
+    @JsonView({View.CustomerView.Public.class, View.CartView.Internal.class})
     private String username;
     @Column (nullable = false, length = 64, name = "password")
     @JsonIgnore
@@ -32,7 +32,7 @@ public class Customer {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
-    @JsonBackReference
+    @JsonIgnore
     private Cart cart;
 
     @Column(updatable = false)
