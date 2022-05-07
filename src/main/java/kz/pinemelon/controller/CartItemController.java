@@ -1,7 +1,10 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import kz.pinemelon.entities.*;
+import kz.pinemelon.domain.Cart;
+import kz.pinemelon.domain.CartItem;
+import kz.pinemelon.domain.Category;
+import kz.pinemelon.form.ItemDetails;
+import kz.pinemelon.form.ItemForm;
 import kz.pinemelon.services.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,48 +18,37 @@ public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
 
-    @GetMapping("cart/{cartId}/items")
-    @JsonView(View.CartItemView.Internal.class)
-    public List<CartItem> getAll(@PathVariable("cartId") Cart cart) {
-        return cart.getItems();
+    @GetMapping("items")
+    public List<ItemDetails> getItems(@RequestParam(required = false, value = "cartId", defaultValue = "0") Cart cart) {
+        return cartItemService.findAllDetails(cart);
     }
 
-    @GetMapping("item")
-    @JsonView(View.CartItemView.Public.class)
-    public List<CartItem> getAll() {
-        return cartItemService.listCartItems();
-    }
-
-    @GetMapping("item/{id}")
-    @JsonView(View.CartItemView.Internal.class)
-    public CartItem get(
+    @GetMapping("items/{id}")
+    public ItemDetails get(
             @PathVariable("id") CartItem cartItem){
-        return cartItem;
+        return cartItemService.getDetails(cartItem);
     }
 
-    @PostMapping("item")
-    public CartItem create(
-            @RequestBody CartItem cartItem
+    @PostMapping("items")
+    public ItemDetails create(
+            @RequestBody ItemForm item
     ) {
-        int amount = cartItem.getAmount();
-        System.out.println(amount);
-        return cartItemService.create(cartItem);
+        return cartItemService.createDetails(item);
     }
 
-    @PutMapping("item/{id}")
-    @JsonView(View.CartItemView.Public.class)
-    public CartItem update(
-            @PathVariable("id") CartItem cartItemFromDB,
-            @RequestBody CartItem cartItem
+    @PutMapping("items/{id}")
+    public ItemDetails update(
+            @PathVariable("id") CartItem oldItem,
+            @RequestBody ItemForm item
     ){
-        return cartItemService.update(cartItemFromDB, cartItem);
+        return cartItemService.updateDetails(oldItem, item);
     }
 
-    @DeleteMapping("item/{id}")
-    @JsonView(View.CartItemView.Public.class)
+    @DeleteMapping("items/{id}")
     public void delete(
             @PathVariable("id") CartItem cartItem){
         cartItemService.delete(cartItem);
     }
+
 
 }

@@ -1,4 +1,4 @@
-package kz.pinemelon.entities;
+package kz.pinemelon.domain;
 
 public class View {
     public interface ComponentView {

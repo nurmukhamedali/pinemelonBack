@@ -1,8 +1,6 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import kz.pinemelon.entities.Category;
-import kz.pinemelon.entities.View;
+import kz.pinemelon.domain.Category;
 import kz.pinemelon.form.CategoryForm;
 import kz.pinemelon.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,26 +10,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin(origins="*")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    @JsonView(View.ComponentView.Public.class)
-    public List<Category> getCategories(@RequestParam(required = false, value = "categoryId", defaultValue = "0") Category category) {
-        return categoryService.list(category);
+    public List<Category> getCategories() {
+        return categoryService.findAll();
     }
 
     @GetMapping("/categories/{id}")
-    @JsonView(View.ComponentView.Internal.class)
     public Category get(
             @PathVariable("id") Category category){
         return category;
     }
 
     @PostMapping("/categories")
-    @JsonView(View.ComponentView.Public.class)
     public Category create(
             @RequestBody CategoryForm category
     ) {
@@ -39,18 +34,15 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{id}")
-    @JsonView(View.ComponentView.Public.class)
     public Category update(
-            @PathVariable("id") Category categoryFromDB,
-            @RequestBody Category category
+            @PathVariable("id") Category oldCategory,
+            @RequestBody CategoryForm category
     ){
-        return categoryService.update(categoryFromDB, category);
+        return categoryService.update(oldCategory, category);
     }
 
     @DeleteMapping("/categories/{id}")
-    @JsonView(View.ComponentView.Public.class)
-    public void delete(
-            @PathVariable("id") Category category){
+    public void delete(@PathVariable("id") Category category){
         categoryService.delete(category);
     }
 }

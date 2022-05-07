@@ -1,12 +1,24 @@
-package kz.pinemelon.form;
+package kz.pinemelon.domain;
 
-public class ProductForm {
-    private Long id;
-    private String name;
-    private String image;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+
+@Entity
+@Table
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+    protected String name;
+    protected String image;
     private String brand;
     private double price;
-    private Long category;
+
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable = false)
+    @JsonIgnore
+    protected Category category;
 
     public Long getId() {
         return id;
@@ -48,11 +60,11 @@ public class ProductForm {
         this.price = price;
     }
 
-    public Long getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Long category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 }

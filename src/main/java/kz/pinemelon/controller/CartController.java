@@ -1,7 +1,8 @@
 package kz.pinemelon.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import kz.pinemelon.entities.*;
+import kz.pinemelon.domain.Cart;
+import kz.pinemelon.domain.User;
+import kz.pinemelon.form.CartForm;
 import kz.pinemelon.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,47 +16,19 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("cart")
-    @JsonView(View.CustomerView.Internal.class)
-    public Cart getCustomerCart(@RequestParam("customerId") Customer customer){
-        return customer.getCart();
-    }
-
     @GetMapping("/carts")
-    @JsonView(View.CartView.Public.class)
     List<Cart> getAll() {
         return cartService.listCart();
     }
 
     @GetMapping("/carts/{id}")
-    @JsonView(View.CartView.Internal.class)
-    public Cart get(
+    public CartForm get(
             @PathVariable("id") Cart cart){
-        return cart;
+        return cartService.get(cart);
     }
 
-    @PostMapping("/carts")
-    @JsonView(View.CartView.Internal.class)
-    public Cart create(
-            @RequestBody Cart cart
-    ) {
-        return cartService.create(cart);
+    @GetMapping("cart")
+    public CartForm getCustomerCart(@RequestParam("customerId") User customer){
+        return cartService.get(customer.getCart());
     }
-
-    @PutMapping("/carts/{id}")
-    @JsonView(View.CartView.Internal.class)
-    public Cart update(
-            @PathVariable("id") Cart cartFromDB,
-            @RequestBody Cart cart
-    ){
-        return cartService.update(cartFromDB, cart);
-    }
-
-    @DeleteMapping("/carts/{id}")
-    @JsonView(View.CartView.Internal.class)
-    public void delete(
-            @PathVariable("id") Cart cart){
-        cartService.delete(cart);
-    }
-
 }

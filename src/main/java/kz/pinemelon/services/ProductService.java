@@ -1,101 +1,83 @@
 package kz.pinemelon.services;
 
+import kz.pinemelon.domain.Category;
+import kz.pinemelon.domain.Product;
 import kz.pinemelon.form.ProductForm;
-import kz.pinemelon.entities.Category;
-import kz.pinemelon.entities.Component;
-import kz.pinemelon.entities.Product;
 import kz.pinemelon.repositories.CategoryRepository;
 import kz.pinemelon.repositories.ProductRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductService {
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    public Product create(ProductForm productForm){
-        Product product = new Product();
-        product.setName(productForm.getName());
-        product.setDescription(productForm.getDescription());
-        product.setImage(productForm.getImage());
-        product.setEnabled(productForm.isEnabled());
-        product.setBrand(productForm.getBrand());
-        product.setPrice(productForm.getPrice());
-        product.setAmount(productForm.getAmount());
-        if (productForm.getCategory_id() != null) {
-            if (categoryRepository.existsById(productForm.getCategory_id())) {
-                Category category = categoryRepository.getById(productForm.getCategory_id());
-                product.setCategory(category);
-            }
-        }
-        product.setCreationDate(LocalDateTime.now());
-        product.setUpdateDate(LocalDateTime.now());
-        return productRepository.save(product);
+    public List<Product> findAll(Category category){
+        if (category != null && categoryService.exist(category.getId()))
+            return category.getProducts();
+        return productRepository.findAll();
     }
 
-    private List<Product> getProducts(Category category){
-        List<Product> products = new ArrayList<>();
-        for (Component component: category.getComponents()) {
-            if (component instanceof Product){
-                products.add((Product) component);
-            } else if (component instanceof Category){
-                products.addAll(this.getProducts((Category) component));
-            }
-        }
-        return products;
+    public Product create(ProductForm product){
+        Product p = new Product();
+        p.setName(product.getName());
+        p.setBrand(product.getBrand());
+        p.setImage(product.getImage());
+        p.setPrice(product.getPrice());
+        if (product.getCategory() != null)
+            p.setCategory(categoryService.get(product.getCategory()));
+        return productRepository.save(p);
     }
 
-    public List<Product> listAll(Category category){
-        if (category == null)
-            return productRepository.findAll();
-        else if (!categoryRepository.existsById(category.getId())){
-            return productRepository.findAll();
-        }
-        return this.getProducts(category);
+    public Product update(Product oldProduct, ProductForm product){
+        oldProduct.setName(product.getName());
+        oldProduct.setBrand(product.getBrand());
+        oldProduct.setImage(product.getImage());
+        oldProduct.setPrice(product.getPrice());
+        if (product.getCategory() != null)
+            oldProduct.setCategory(categoryService.get(product.getCategory()));
+        return productRepository.save(oldProduct);
     }
 
-    public Product update(Product product, ProductForm temp){
-        // refresh values of product by values of temp
-        if (temp.getName() != null){
-            product.setName(temp.getName());
-        }
-        if (temp.getDescription() != null){
-            product.setDescription(temp.getDescription());
-        }
-        if (temp.getImage() != null){
-            product.setImage(temp.getImage());
-        }
-        if (temp.isEnabled()){
-            product.setEnabled(temp.isEnabled());
-        }
-        if (temp.getBrand() != null){
-            product.setBrand(temp.getBrand());
-        }
-        if (temp.getAmount() != -1){
-            product.setAmount(temp.getAmount());
-        }
-        if (temp.getPrice() != 0){
-            product.setPrice(temp.getPrice());
-        }
-        if (temp.getCategory_id() != null) {
-            if (categoryRepository.existsById(temp.getCategory_id())) {
-                Category category = categoryRepository.getById(temp.getCategory_id());
-                product.setCategory(category);
-            }
-        }
-        product.setUpdateDate(LocalDateTime.now());
-        return productRepository.save(product);
-    }
     public void delete(Product product){
         productRepository.delete(product);
+    }
+
+    public ProductForm getDetails(Product product){
+        ProductForm p = new ProductForm();
+        p.setId(product.getId());
+        p.setName(product.getName());
+        p.setBrand(product.getBrand());
+        p.setImage(product.getImage());
+        p.setPrice(product.getPrice());
+        p.setCategory(product.getCategory().getId());
+        return p;
+    }
+
+    public ProductForm createDetails(ProductForm product){
+        return getDetails(create(product));
+    }
+
+    public ProductForm updateDetails(Product oldProduct, ProductForm product){
+        return getDetails(update(oldProduct, product));
+    }
+
+    public List<ProductForm> findAllDetails(Category category){
+        List<ProductForm> forms = new ArrayList<>();
+        for (Product product: findAll(category)) {
+            forms.add(getDetails(product));
+        }
+        return forms;
+    }
+
+    public Product get(Long id){
+        return productRepository.getById(id);
     }
 }

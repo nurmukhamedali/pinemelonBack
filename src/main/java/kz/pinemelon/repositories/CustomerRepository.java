@@ -1,7 +1,7 @@
 package kz.pinemelon.repositories;
 
-import kz.pinemelon.entities.Customer;
+import kz.pinemelon.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<User, Long> {
 }
